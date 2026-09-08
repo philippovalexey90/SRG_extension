@@ -2,7 +2,7 @@
   "extensions": [
     
     {
-      "builtin": "True",
+      "builtin": "False",
       "type": "extension",
       "rocket_mode_compatible": "False",
       "name": "SRG_2D",
