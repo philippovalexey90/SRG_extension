@@ -1,0 +1,36 @@
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <Label x:Name="SecMrk" Content="Введите марку раздела" HorizontalAlignment="Left" Margin="36,40,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tb_sec_mrk" HorizontalAlignment="Left" Margin="36,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        <Label x:Name="StructMrk" Content="Введите марку конструкции" HorizontalAlignment="Left" Margin="36,118,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tb_struct_mrk" HorizontalAlignment="Left" Margin="36,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        
+
+        <Label x:Name="SetMrk" Content="Введите марку сборки" HorizontalAlignment="Left" Margin="280,118,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tb_set_mrk" HorizontalAlignment="Left" Margin="280,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+
+        
+        <CheckBox x:Name="ChBox" Content="Специфицировать сборку" HorizontalAlignment="Left" Margin="250,341,0,0" VerticalAlignment="Top" />
+
+        <Button
+            x:Name="SaveButton"
+            Content="Сохранить"
+            HorizontalAlignment="Left"
+            Margin="583,353,0,0"
+            VerticalAlignment="Top"
+            Height="25"
+            Width="65" />
+
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="260" Margin="24,110,0,0" VerticalAlignment="Top" Width="217"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="260" Margin="240,110,0,0" VerticalAlignment="Top" Width="217"/>
+    </Grid>
+</Window>
