@@ -1,0 +1,20 @@
+{
+  "extensions": [
+    
+    {
+      "builtin": "True",
+      "type": "extension",
+      "rocket_mode_compatible": "False",
+      "name": "SRG_2D",
+      "description": "2D Reinforcement",
+      "author": "Filippov Alexey",
+      "author_profile": "",
+      "url": "https://github.com/philippovalexey90/SRG_extension.git",
+      "website": "",
+      "image": "",
+      "dependencies": []
+    }
+
+  ]
+
+}
