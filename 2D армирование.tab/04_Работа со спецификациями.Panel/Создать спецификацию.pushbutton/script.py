@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-ап
-"""
+
 # Imports
 import clr
 from pyrevit import forms, script, revit, DB, UI
