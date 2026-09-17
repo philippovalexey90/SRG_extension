@@ -46,11 +46,12 @@ doc = __revit__.ActiveUIDocument.Document
 uidoc = __revit__.ActiveUIDocument
 
 all_reinf = FEC_AllReinf_in_doc(doc)
-SHP_simple, SHP_set = List_reinf_SHP_summ_dct(SHP_sep_to_list(all_reinf))
-SUM_simple, SUM_set = List_reinf_SUM_summ_dct(SUM_sep_to_list(all_reinf))
-# получил 4 словаря SHP_simple, SHP_set, SUM_simple, SUM_set
+SHP_work, SHP_set = List_reinf_SHP_summ_dct(SHP_sep_to_list(all_reinf))
+SUM_work, SUM_set, SUM_simple = List_reinf_SUM_summ_dct(SUM_sep_to_list(all_reinf))
+# получил 5 словаря SHP_simple_work, SHP_set, SUM_simple_work, SUM_set, SUM_simple
+#  выполнить проверку, что для каждого SHP_work есть хотя бы 1 SUM_simple
 
-updated_SHP = calculate_a_summ_GPT(SHP_simple, SUM_simple)
+updated_SHP = calculate_a_summ_GPT(SHP_work, SUM_work)
 write_total_cnt_to_revit(updated_SHP, doc)
 
 
