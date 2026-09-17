@@ -124,11 +124,11 @@ def List_reinf_SHP_summ_dct(reinf_SHP_summ):
         if get_param_value(family_instance.LookupParameter('• Марка сборки')) =='':
             key_abc = get_family_instance_key_abc(family_instance)
             key_ab = get_family_instance_key_ab(family_instance)
-            add_to_dict(SHP_simple_work, key_ab, family_instance)
+            add_to_dict(SHP_simple_work, key_ab, family_instance) # собрали все shp c параметрами "• Раздел", "• Марка конструкции"
             # SHP_simple_work[key_ab] = family_instance
 
-            if key_abc in SHP_simple:
-                print('Ошибка! Элементов армирования SHP c параметрами • Раздел, • Марка конструкции, • Марка элемента повторяются')
+            if key_abc in SHP_simple: #проверка на повторяющиеся параметры SHP
+                print('Ошибка! Элементов армирования SHP c параметрами "• Раздел", "• Марка конструкции", "• Марка элемента" повторяются')
                 for i in key_abc:
                     print(i)
 
@@ -143,12 +143,19 @@ def List_reinf_SHP_summ_dct(reinf_SHP_summ):
                 #     print("Id: {}".format(p.Definition.Id))
 
             else:
-                SHP_simple[key_abc] = family_instance
+                SHP_simple[key_abc] = family_instance # собрали уникальне shp c параметрами "• Раздел", "• Марка конструкции", "• Марка элемента"
+
+                """
+                теперь нужно создать  SUM_simple[key_abc] = family_instance # собрали НЕ уникальные SUM c параметрами "• Раздел", "• Марка конструкции", "• Марка элемента"
+                Выполнить, что для  SHP_simple[key_abc] есть хотябы один SUM_simple[key_abc], иначе ошибка
+                "Ошибка подходящих элементов для SHP (id) из SUM нет"
+                
+                """
 
 
         else:
             key_abd = get_family_instance_key_abd(family_instance)
-            add_to_dict(SHP_set_work, key_abd, family_instance)
+            add_to_dict(SHP_set_work, key_abd, family_instance) # собрали все SHP, которые в сборке
             # print(key)
             # SHP_set[key_abd] = family_instance
 
@@ -164,6 +171,7 @@ def List_reinf_SHP_summ_dct(reinf_SHP_summ):
 def List_reinf_SUM_summ_dct(reinf_SUM_summ):
 
     SUM_simple_work = {}
+    SUM_simple = {}
     SUM_set_work = {}
 
     for family_instance in reinf_SUM_summ:
@@ -172,6 +180,9 @@ def List_reinf_SUM_summ_dct(reinf_SUM_summ):
 
             key_ab = get_family_instance_key_ab(family_instance)
             add_to_dict(SUM_simple_work, key_ab, family_instance)
+
+            key_abc = get_family_instance_key_abс(family_instance)
+            add_to_dict(SUM_simple, key_abc, family_instance)
 
 
         else:
@@ -185,7 +196,7 @@ def List_reinf_SUM_summ_dct(reinf_SUM_summ):
     # print('SUM_set_work')
     # print_dict_elements(SUM_set_work)
 
-    return SUM_simple_work, SUM_set_work
+    return SUM_simple_work, SUM_set_work, SUM_simple
 
 # def calculate_a_summ(SHP_simple, SUM_simple):
 #     for idx, (key, value) in enumerate(SHP_simple.items(), 1):
