@@ -181,7 +181,7 @@ def List_reinf_SUM_summ_dct(reinf_SUM_summ):
             key_ab = get_family_instance_key_ab(family_instance)
             add_to_dict(SUM_simple_work, key_ab, family_instance)
 
-            key_abc = get_family_instance_key_abс(family_instance)
+            key_abc = get_family_instance_key_abc(family_instance)
             add_to_dict(SUM_simple, key_abc, family_instance)
 
 
