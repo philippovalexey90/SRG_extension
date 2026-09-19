@@ -166,7 +166,7 @@ def List_reinf_SHP_summ_dct(reinf_SHP_summ):
     # print('SHP_set_work')
     # print_dict_elements(SHP_set_work)
 
-    return SHP_simple_work, SHP_set_work
+    return SHP_simple_work, SHP_set_work, SHP_simple
 
 def List_reinf_SUM_summ_dct(reinf_SUM_summ):
 
@@ -315,6 +315,35 @@ def get_param_value(param):
     elif param.StorageType == StorageType.String:
         value = param.AsString()
     return value
+
+def check_SUM_without_SHP(SHP_simple, SUM_simple):
+    """
+    Проверяет наличие соответствующего SHP
+    для каждого элемента SUM.
+
+    Сравнение выполняется по ключу:
+    "• Раздел", "• Марка конструкции", "• Марка элемента"
+    """
+    print("словарь SHP_simple")
+    print_dict_elements(SHP_simple)
+
+    for key_abc, sum_elements in SUM_simple.items():
+
+        if key_abc not in SHP_simple:
+
+            for sum_element in sum_elements:
+
+                print(
+                    'Для элемента SUM ("• Раздел: {}", '
+                    '"• Марка конструкции: {}", '
+                    '"• Марка элемента: {}", Id: {}) '
+                    'нет ни одного подходящего элемента SHP'.format(
+                        key_abc[0],
+                        key_abc[1],
+                        key_abc[2],
+                        sum_element.Id
+                    )
+                )
 
 # Работа со словарем
 
