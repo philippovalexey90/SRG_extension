@@ -125,7 +125,7 @@ def List_reinf_SHP_summ_dct(reinf_SHP_summ):
             key_abc = get_family_instance_key_abc(family_instance)
             key_ab = get_family_instance_key_ab(family_instance)
             add_to_dict(SHP_simple_work, key_ab, family_instance) # собрали все shp c параметрами "• Раздел", "• Марка конструкции"
-            # SHP_simple_work[key_ab] = family_instance
+
 
             if key_abc in SHP_simple: #проверка на повторяющиеся параметры SHP
                 print('Ошибка! Элементов армирования SHP c параметрами "• Раздел", "• Марка конструкции", "• Марка элемента" повторяются')
@@ -255,12 +255,12 @@ def List_reinf_SUM_summ_dct(reinf_SUM_summ):
 #
 #     return SHP_simple
 
-def calculate_a_summ_GPT(SHP_simple, SUM_simple):
+def calculate_a_summ_GPT(SHP_simple_work, SUM_simple_work):
     updated_SHP = {}
 
-    for key, SHP_list in SHP_simple.items():
+    for key, SHP_list in SHP_simple_work.items():
         # Безопасно получаем список из SUM_simple. Если ключа нет — используем пустой список
-        SUM_list = SUM_simple.get(key, [])
+        SUM_list = SUM_simple_work.get(key, [])
         # print('Ключ: {}'.format(tuple_to_string(key)))
         new_list_for_key = []
 
