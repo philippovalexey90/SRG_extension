@@ -324,8 +324,8 @@ def check_SUM_without_SHP(SHP_simple, SUM_simple):
     Сравнение выполняется по ключу:
     "• Раздел", "• Марка конструкции", "• Марка элемента"
     """
-    print("словарь SHP_simple")
-    print_dict_elements(SHP_simple)
+    # print("словарь SHP_simple")
+    # print_dict_elements(SHP_simple)
 
     for key_abc, sum_elements in SUM_simple.items():
 

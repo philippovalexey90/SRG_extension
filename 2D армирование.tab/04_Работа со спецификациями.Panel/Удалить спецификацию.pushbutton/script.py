@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+__title__ = "Удалить спецификацию из проекта"
+__doc__ = """Version = 1.0
+Date    = 19.09.2026
+_____________________________________________________________________
+Отработано:
+Отработано на версии 2022
+"""
+
 # Imports
 import clr
 from pyrevit import forms, script, revit, DB, UI
@@ -11,48 +19,13 @@ clr.AddReference('System.Windows.Forms')
 clr.AddReference('IronPython.Wpf')
 
 # CustomImports
-# from Snippets._selection import find_views_by_family_name
+from Snippets._transactions import delete_selected_schedule
 
 
 doc = __revit__.ActiveUIDocument.Document
 uidoc = __revit__.ActiveUIDocument
 
-# Xamlfile
+selection_ids = uidoc.Selection.GetElementIds()
 
-xamlfile = script.get_bundle_file('ui.xaml')
-
-print('Создать спецификацию')
-
-# Class
-
-# class MyCustomWindow(Windows.Window):
-#     def __init__(self):
-#         wpf.LoadComponent(self, xamlfile)
-#
-#
-#         self.SaveButton.Click += self.save_button_clicked
-#
-#
-#     def save_button_clicked(self, sender, event):
-#         try:
-#             family_name = self.tb_family_name.Text
-#             views_list = find_views_by_family_name(doc, family_name)
-#             print("Тип '{}' найден на следующих видах:".format(family_name))
-#             for view_name in views_list:
-#                 print("- {}".format(view_name))
-#
-#             # Закрыть окно после обработки
-#             self.Close()
-#
-#         except Exception as e:
-#             print("Ошибка в save_button_clicked:", e)
-
-
-
-
-
-
-# Main
-
-# window = MyCustomWindow()
-# window.ShowDialog()
+for element_id in selection_ids:
+    delete_selected_schedule(doc, element_id)

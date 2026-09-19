@@ -53,3 +53,34 @@ def write_total_cnt_to_revit(updated_SHP, doc):
         # Если произошла любая ошибка, откатываем изменения, чтобы не испортить модель
         t.RollBack()
         print("Ошибка внутри транзакции! Изменения отменены. Ошибка: {}".format(str(e)))
+
+def delete_selected_schedule(doc, element_id):
+    """
+    Удаляет выбранную спецификацию из проекта Revit
+    вместе с её размещением на листе.
+    """
+
+    element = doc.GetElement(element_id)
+
+    if not isinstance(element, ScheduleSheetInstance):
+        print(
+            'Ошибка: выбранный элемент не является спецификацией на листе'
+        )
+        return
+
+    schedule_id = element.ScheduleId
+
+    t = Transaction(doc, "Удалить спецификацию")
+
+    try:
+        t.Start()
+
+        # Удаляем саму спецификацию из проекта.
+        # Размещение на листе удаляется вместе с ней.
+        doc.Delete(schedule_id)
+
+        t.Commit()
+
+    except Exception:
+        t.RollBack()
+        raise
