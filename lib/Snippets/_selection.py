@@ -48,39 +48,39 @@ def FEC_AllDetail_in_view(doc, active_view):
     for family_instance in all_detail_in_view: detail.append(family_instance)
     return detail
 
-def FEC_AllReinf_in_view_study(doc, active_view):
-    """ Function select Reinf components in Revit UI"""
-    reinf = []
-    reinffam_R_SHP ='R-SHP'
-    reinffam_R_SUM = 'R-SUM'
+# def FEC_AllReinf_in_view_study(doc, active_view):
+#     """ Function select Reinf components in Revit UI"""
+#     reinf = []
+#     reinffam_R_SHP ='R-SHP'
+#     reinffam_R_SUM = 'R-SUM'
+#
+#     all_detail_in_view = FilteredElementCollector(doc, active_view.Id) \
+#         .OfCategory(BuiltInCategory.OST_DetailComponents).WhereElementIsNotElementType().ToElements()
+#     for family_instance in all_detail_in_view:
+#         if reinffam_R_SHP in family_instance.Symbol.Family.Name or reinffam_R_SUM in family_instance.Symbol.Family.Name:
+#             reinf.append(family_instance)
+#     return reinf
 
-    all_detail_in_view = FilteredElementCollector(doc, active_view.Id) \
-        .OfCategory(BuiltInCategory.OST_DetailComponents).WhereElementIsNotElementType().ToElements()
-    for family_instance in all_detail_in_view:
-        if reinffam_R_SHP in family_instance.Symbol.Family.Name or reinffam_R_SUM in family_instance.Symbol.Family.Name:
-            reinf.append(family_instance)
-    return reinf
-
-def FEC_AllReinf_in_view_study1(doc, active_view):
-    """Function select Reinf components in Revit UI"""
-    reinffam_R_SHP = 'R-SHP'
-    reinffam_R_SUM = 'R-SUM'
-    reinffam_DRF = 'DRF'
-    reinffam_DRS = 'DRS'
-
-
-    all_detail_in_view = FilteredElementCollector(doc, active_view.Id) \
-        .OfCategory(BuiltInCategory.OST_DetailComponents).WhereElementIsNotElementType().ToElements()
-
-    reinf = [family_instance for family_instance in all_detail_in_view
-              if hasattr(family_instance, 'Symbol') and
-                 (reinffam_R_SHP in family_instance.Symbol.Family.Name or
-                  reinffam_R_SUM in family_instance.Symbol.Family.Name or
-                  reinffam_DRF in family_instance.Symbol.Family.Name or
-                  reinffam_DRS in family_instance.Symbol.Family.Name)]
-
-
-    return reinf
+# def FEC_AllReinf_in_view_study1(doc, active_view):
+#     """Function select Reinf components in Revit UI"""
+#     reinffam_R_SHP = 'R-SHP'
+#     reinffam_R_SUM = 'R-SUM'
+#     reinffam_DRF = 'DRF'
+#     reinffam_DRS = 'DRS'
+#
+#
+#     all_detail_in_view = FilteredElementCollector(doc, active_view.Id) \
+#         .OfCategory(BuiltInCategory.OST_DetailComponents).WhereElementIsNotElementType().ToElements()
+#
+#     reinf = [family_instance for family_instance in all_detail_in_view
+#               if hasattr(family_instance, 'Symbol') and
+#                  (reinffam_R_SHP in family_instance.Symbol.Family.Name or
+#                   reinffam_R_SUM in family_instance.Symbol.Family.Name or
+#                   reinffam_DRF in family_instance.Symbol.Family.Name or
+#                   reinffam_DRS in family_instance.Symbol.Family.Name)]
+#
+#
+#     return reinf
 
 def FEC_AllReinf_in_view(doc, active_view):
     """Function select Reinf components in Revit UI"""

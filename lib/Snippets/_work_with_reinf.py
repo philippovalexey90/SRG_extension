@@ -114,6 +114,56 @@ def SUM_sep_to_list (family_instance):
     #         pass
     return reinf_SUM_summ
 
+def SUM_SHP_sep_to_list (family_instance):
+
+    reinffam_R_SHP = 'R-SHP'
+    reinffam_R_SUM = 'R-SUM'
+    reinffam_DRF = 'DRF'
+    reinffam_DRS = 'DRS'
+
+    # Словарь с семействами, которые мы хотим проверить
+    valid_families = {
+        reinffam_R_SUM: True,
+        reinffam_DRS: True,
+        reinffam_R_SHP: True,
+        reinffam_DRF: True
+    }
+
+    reinf = [
+        reinf_instance for reinf_instance in family_instance
+        if hasattr(reinf_instance, 'Symbol') and
+           any(part in reinf_instance.Symbol.Family.Name for part in valid_families)
+    ]
+    # for reinf_instance in reinf:
+    #     print("reinf: {}".format(reinf_instance))
+
+    reinf_sep = []
+    for reinf_instance in reinf:
+        try:
+
+            instance = get_reinf_SUM_to_summ(reinf_instance)
+            if instance is None:
+                continue
+            else: reinf_sep.append(instance)
+        except:
+            continue
+
+        # Проверка: Проходим по всем экземплярам и выводим имя семейства
+    # for family_instance in reinf_SUM_summ:
+    #     # print("reinf_SUM_summ: {}".format(family_instance))
+    #     family = family_instance.Symbol.Family  # Получаем семейство
+    #     family_name = family.Name  # Получаем имя семейства
+    #     spek = family_instance.LookupParameter('• Учет в спецификации')
+    #     cnt = family_instance.LookupParameter('• Рассчитать количество')
+    #
+    #     try:
+    #         print("Экземпляр: {}, Имя семейства: {}, • Учет в спецификации: {}, • Рассчитать количество: {}".format(
+    #             family_instance.Id, family_name, get_param_value(spek), get_param_value(cnt)))
+    #
+    #     except:
+    #         pass
+    return reinf_sep
+
 def List_reinf_SHP_summ_dct(reinf_SHP_summ):
     SHP_simple = {}
     SHP_simple_work = {}

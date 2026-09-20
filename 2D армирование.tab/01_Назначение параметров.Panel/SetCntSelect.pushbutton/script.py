@@ -29,6 +29,7 @@ from System import Windows
 
 # CustomImports
 from Snippets._set_param import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
+from Snippets._work_with_reinf import SUM_SHP_sep_to_list
 
 
 clr.AddReference('System.Windows.Forms')
@@ -48,9 +49,7 @@ reinf=[]
 # Selection
 
 for i in reinf_id: reinf.append(doc.GetElement(i))
-
-
-
+reinf_sep = SUM_SHP_sep_to_list(reinf)
 
 # Xamlfile
 
@@ -82,9 +81,9 @@ class MyCustomWindow(Windows.Window):
             # print("Чекбокс: {}\n".format(self.ChBox.IsChecked))
 
 
-            SetSet_mrkToReinf(set_mrk, reinf)
-            SetSet_cntToReinf(set_cnt, reinf)
-            SetSetChBox_cntToReinf(set_chBox, reinf)
+            SetSet_mrkToReinf(set_mrk, reinf_sep)
+            SetSet_cntToReinf(set_cnt, reinf_sep)
+            SetSetChBox_cntToReinf(set_chBox, reinf_sep)
 
             # Закрыть окно после обработки
             self.Close()
