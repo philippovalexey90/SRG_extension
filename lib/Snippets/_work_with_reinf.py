@@ -285,12 +285,12 @@ def calculate_a_summ_GPT(SHP_simple_work, SUM_simple_work):
     return updated_SHP
 
 
-
-
-
 # Вспомогательные функции
 
 def get_reinf_SHP_to_summ(family_instance):
+    """
+    Выбрать все элементы SHP с включенными параметрами • Учет в спецификации, • Рассчитать количество
+    """
 
     spek_val = get_param_value(family_instance.LookupParameter('• Учет в спецификации'))
     cnt_val = get_param_value(family_instance.LookupParameter('• Рассчитать количество'))
@@ -298,6 +298,9 @@ def get_reinf_SHP_to_summ(family_instance):
         return family_instance
 
 def get_reinf_SUM_to_summ(family_instance):
+    """
+    Выбрать все элементы SUM с включенным параметром  • Рассчитать количество
+    """
 
     cnt_val = get_param_value(family_instance.LookupParameter('• Рассчитать количество'))
     if cnt_val == 1:
@@ -344,6 +347,7 @@ def check_SUM_without_SHP(SHP_simple, SUM_simple):
                         sum_element.Id
                     )
                 )
+
 
 # Работа со словарем
 
@@ -421,6 +425,7 @@ def add_to_dict(dict, key, new_item):
     if key not in dict:
         dict[key] = [] #Создаем новый список
     dict[key].append(new_item)
+
 
 # Ключи словаря
 
