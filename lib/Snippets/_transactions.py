@@ -4,8 +4,6 @@
 import clr
 # clr.AddReference('System')
 
-
-
 from Autodesk.Revit.DB import *
 from Autodesk.Revit.DB.Structure import *
 from Autodesk.Revit.UI import *

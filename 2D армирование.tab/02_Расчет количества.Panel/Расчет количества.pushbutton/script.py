@@ -56,10 +56,10 @@ check_SUM_without_SHP(SHP_simple, SUM_simple)
 updated_SHP = calculate_a_summ_GPT(SHP_simple_work, SUM_simple_work)
 # print_dict_elements(SHP_set_work)
 # print_dict_elements(SUM_set_work)
-updated_SHP = calculate_a_summ_GPT(SHP_set_work, SUM_set_work)
+updated_SHP_set = calculate_a_summ_GPT(SHP_set_work, SUM_set_work)
 
 write_total_cnt_to_revit(updated_SHP, doc)
-
+write_total_cnt_to_revit(updated_SHP_set, doc)
 
 '''
 Функция получает на вход 2 словаря
