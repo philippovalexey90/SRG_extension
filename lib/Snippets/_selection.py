@@ -329,6 +329,62 @@ def find_views_by_family_name(doc, family_name):
 # for view_name in views_list:
 #     print("- {}".format(view_name))
 
+# Work with Views
+
+def get_all_views_on_active_sheet():
+    """
+    Находит и возвращает список всех видов (View), размещенных на активном листе.
+    """
+    doc = revit.doc
+    active_sheet = doc.ActiveView
+
+    # 1. Проверяем, что мы действительно на листе
+    if active_sheet.ViewType != ViewType.DrawingSheet:
+        forms.alert("Активный вид не является листом!", title="Ошибка")
+        return []
+
+    # Идентификатор текущего листа
+    current_sheet_id = active_sheet.Id
+    views = []
+
+    # 2. Собираем все видовые экраны в проекте
+    viewports = FilteredElementCollector(doc) \
+        .OfClass(Viewport) \
+        .ToElements()
+
+    # 3. Фильтруем видовые экраны: ищем те, которые лежат на нашем листе
+    for vp in viewports:
+        # Проверяем, совпадает ли ID листа видового экрана с нашим активным листом
+        if vp.SheetId == current_sheet_id:
+            # Извлекаем ID самого вида, привязанного к этому экрану
+            view_id = vp.ViewId
+            view_element = doc.GetElement(view_id)
+
+            if view_element:
+                views.append(view_element)
+
+    return views
+
+
+def filter_specific_views(all_views):
+    """
+    Фильтрует список видов и оставляет только:
+    Планы несущих конструкций, Фасады, Разрезы, Чертежные виды и Узлы/Фрагменты.
+    """
+    # Создаем множество (set) из целевых типов видов для быстрой проверки
+    target_types = {
+        ViewType.EngineeringPlan,
+        ViewType.Elevation,
+        ViewType.Section,
+        ViewType.DraftingView,
+        ViewType.Detail
+    }
+
+    # Фильтруем виды с помощью генератора списков (List Comprehension)
+    filtered_views = [v for v in all_views if v.ViewType in target_types]
+
+    return filtered_views
+
 
 # Class
 

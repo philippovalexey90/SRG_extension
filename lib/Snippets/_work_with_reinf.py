@@ -510,3 +510,48 @@ def get_element_param_value(element, param):
     val = get_param_value(element.LookupParameter(param))
     return val
 
+# Работа со списками
+
+def print_nested_list(target_list, level=0):
+    """
+    Рекурсивно выводит на печать элементы списка,
+    включая любые вложенные списки или кортежи.
+
+    :param target_list: Исходный список/кортеж для печати
+    :param level: Текущий уровень вложенности (используется для отступов)
+    """
+    # Проверяем, пустой ли список на данном уровне
+    if not target_list:
+        print("  " * level + "[Пустой список]")
+        return
+
+    for idx, element in enumerate(target_list, 1):
+        # Вычисляем отступ: 2 пробела умножаем на текущий уровень вложенности
+        indent = "  " * level
+
+        # Если элемент сам является списком или кортежем — уходим на уровень глубже
+        if isinstance(element, (list, tuple)):
+            print("{}{}. [Вложенный список уровня {}]:".format(indent, idx, level + 1))
+            # Вызываем функцию внутри себя, увеличивая уровень отступа на 1
+            print_nested_list(element, level + 1)
+        else:
+            # Если у элемента Revit есть свойства Id и Name — выводим их
+            if hasattr(element, 'Id') and hasattr(element, 'Name'):
+                print("{}{}. ID: {}, Имя: {}".format(indent, idx, element.Id, element.Name))
+            else:
+                # Для обычных строк, чисел или других объектов
+                print("{}{}. {}".format(indent, idx, element))
+
+def flatten_list(nested_list):
+    """Рекурсивно превращает любой вложенный список в плоский."""
+    flat_list = []
+    for item in nested_list:
+        # Проверяем, является ли элемент списком или кортежем
+        if isinstance(item, (list, tuple)):
+            # Рекурсивно вызываем эту же функцию для вложенного списка
+            flat_list.extend(flatten_list(item))
+        else:
+            flat_list.append(item)
+    return flat_list
+
+
