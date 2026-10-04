@@ -60,9 +60,14 @@ xamlfile = script.get_bundle_file('ui.xaml')
 
 class MyCustomWindow(Windows.Window):
     def __init__(self):
+        # Загружаем интерфейс из XAML
         wpf.LoadComponent(self, xamlfile)
+        # --- УСТАНОВКА ЗНАЧЕНИЙ ПО УМОЛЧАНИЮ ---
         self.ChBox.IsChecked = False
-
+        self.tb_struct_cnt.Text = "1"
+        self.tb_set_cnt.Text = "1"
+        # ----------------------------------------
+        # Подписка на события
         self.SaveButton.Click += self.save_button_clicked
         self.ChBox.Checked += self.chBox_Checked
         self.ChBox.Unchecked += self.chBox_Unchecked

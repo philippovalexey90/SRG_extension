@@ -16,12 +16,11 @@
         <Label x:Name="StructCnt" Content="Введите количество конструкций" HorizontalAlignment="Left" Margin="36,207,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="tb_struct_cnt" HorizontalAlignment="Left" Margin="36,249,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
-        <Label x:Name="SetMrk" Content="Введите марку сборки" HorizontalAlignment="Left" Margin="280,118,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tb_set_mrk" HorizontalAlignment="Left" Margin="280,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
         <Label x:Name="SetCnt" Content="Введите количество сборок" HorizontalAlignment="Left" Margin="280,207,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="tb_set_cnt" HorizontalAlignment="Left" Margin="280,249,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <CheckBox x:Name="ChBox" Content="Специфицировать сборку" HorizontalAlignment="Left" Margin="250,341,0,0" VerticalAlignment="Top" />
+
+        <CheckBox x:Name="ChBox_1" Content="Ввести количество" HorizontalAlignment="Left" Margin="250,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.484,3.097" />
 
         <Button
             x:Name="SaveButton"

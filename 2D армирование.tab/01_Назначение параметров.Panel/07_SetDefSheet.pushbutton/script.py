@@ -88,35 +88,41 @@ xamlfile = script.get_bundle_file('ui.xaml')
 
 class MyCustomWindow(Windows.Window):
     def __init__(self):
+        # Загружаем интерфейс из XAML
         wpf.LoadComponent(self, xamlfile)
-        self.ChBox.IsChecked = False
+        # --- УСТАНОВКА ЗНАЧЕНИЙ ПО УМОЛЧАНИЮ ---
+        self.ChBox_1.IsChecked = True
+        self.tb_struct_cnt.Text = "1"
+        self.tb_set_cnt.Text = "1"
+        # ----------------------------------------
 
+        # Подписка на события
         self.SaveButton.Click += self.save_button_clicked
-        self.ChBox.Checked += self.chBox_Checked
-        self.ChBox.Unchecked += self.chBox_Unchecked
+        self.ChBox_1.Checked += self.chBox_Checked
+        self.ChBox_1.Unchecked += self.chBox_Unchecked
 
     def save_button_clicked(self, sender, event):
         try:
             sec_mrk = self.tb_sec_mrk.Text
             struct_mrk = self.tb_struct_mrk.Text
             struct_cnt = self.tb_struct_cnt.Text
-            set_mrk = self.tb_set_mrk.Text
+
             set_cnt = self.tb_set_cnt.Text
-            set_chBox = self.ChBox.IsChecked
+            set_chBox = self.ChBox_1.IsChecked
 
             # print("Марка раздела: {}\n".format(sec_mrk))
             # print("Марка конструкции: {}\n".format(struct_mrk))
             # print("Количество конструкций: {}\n".format(struct_cnt))
             # print("Марка сборки: {}\n".format(set_mrk))
             # print("Количество сборок: {}\n".format(set_cnt))
-            # print("Чекбокс: {}\n".format(self.ChBox.IsChecked))
+            # print("Чекбокс: {}\n".format(self.ChBox_1.IsChecked))
 
             SetSec_mrkToReinf(sec_mrk, reinf)
             SetStruct_mrkToReinf(struct_mrk, reinf)
             SetStruct_cntToReinf(struct_cnt, reinf_SHP)
-            SetSet_mrkToReinf(set_mrk, reinf)
+            # SetSet_mrkToReinf(set_mrk, reinf)
             SetSet_cntToReinf(set_cnt, reinf_SHP)
-            SetSetChBox_cntToReinf(set_chBox, reinf)
+            # SetSetChBox_cntToReinf(set_chBox, reinf)
 
             # Закрыть окно после обработки
             self.Close()
