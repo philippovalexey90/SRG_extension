@@ -53,6 +53,9 @@ SUM_simple_work, SUM_set_work, SUM_simple = List_reinf_SUM_summ_dct(SUM_sep_to_l
 
 check_SUM_without_SHP(SHP_simple, SUM_simple)
 
+# print_dict_elements(SHP_simple)
+# print_dict_elements(SUM_simple)
+
 updated_SHP = calculate_a_summ_GPT(SHP_simple_work, SUM_simple_work)
 # print_dict_elements(SHP_set_work)
 # print_dict_elements(SUM_set_work)

@@ -29,7 +29,7 @@ from System import Windows
 
 # CustomImports
 from Snippets._set_param import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
-from Snippets._work_with_reinf import SUM_SHP_sep_to_list
+from Snippets._work_with_reinf import SUM_SHP_sep_to_list, print_nested_list
 
 
 clr.AddReference('System.Windows.Forms')
@@ -50,6 +50,8 @@ reinf=[]
 
 for i in reinf_id: reinf.append(doc.GetElement(i))
 reinf_sep = SUM_SHP_sep_to_list(reinf)
+
+# print_nested_list(reinf_sep)
 
 # Xamlfile
 

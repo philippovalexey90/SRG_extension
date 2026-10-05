@@ -65,7 +65,7 @@ for view in views:
     reinf.extend(FEC_AllReinf_in_view(doc, view))
     reinf_SHP.extend(FEC_AllReinf_in_view_SHP(doc, view))
 
-print_nested_list(reinf)
+# print_nested_list(reinf)
 
 
 # Selection
