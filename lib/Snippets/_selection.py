@@ -2,7 +2,8 @@
 
 # Imports
 import clr
-# clr.AddReference('System')
+clr.AddReference('System')
+from System.Collections.Generic import List as NetList
 
 
 
@@ -10,6 +11,7 @@ from Autodesk.Revit.DB import *
 from Autodesk.Revit.DB.Structure import *
 from Autodesk.Revit.UI import *
 from pyrevit import revit, DB, UI
+
 
 # Variables
 
@@ -179,6 +181,80 @@ def FEC_AllReinf_in_doc(doc):
     #     print("Экземпляр: {}, Имя семейства: {}".format(family_instance.Id, family_name))
 
     return reinf
+
+def FEC_AllStructBuiltInCat_in_doc(doc):
+    """Function select Structural Builtin components in Revit DOC"""
+
+    # 1. Создаем список категорий в формате .NET (требование Revit API)
+    categories = NetList[BuiltInCategory]()
+
+    categories.Add(BuiltInCategory.OST_Walls)
+    categories.Add(BuiltInCategory.OST_StructuralFoundation)
+    categories.Add(BuiltInCategory.OST_Floors)
+    categories.Add(BuiltInCategory.OST_StructuralFraming)
+    categories.Add(BuiltInCategory.OST_StructuralColumns)
+
+    # 2. Создаем мульти-категорийный фильтр
+    multi_filter = ElementMulticategoryFilter(categories)
+
+    # 3. Собираем ВСЕ элементы этих категорий за ОДИН запрос
+    all_elements = FilteredElementCollector(doc) \
+        .WherePasses(multi_filter) \
+        .WhereElementIsNotElementType() \
+        .ToElements()
+
+    # 4. Быстро распределяем элементы по спискам с помощью генераторов Python
+    walls = [e for e in all_elements if e.Category.Id.IntegerValue == int(BuiltInCategory.OST_Walls)]
+    foundations = [e for e in all_elements if
+                   e.Category.Id.IntegerValue == int(BuiltInCategory.OST_StructuralFoundation)]
+    floors = [e for e in all_elements if e.Category.Id.IntegerValue == int(BuiltInCategory.OST_Floors)]
+    framing = [e for e in all_elements if e.Category.Id.IntegerValue == int(BuiltInCategory.OST_StructuralFraming)]
+    columns = [e for e in all_elements if e.Category.Id.IntegerValue == int(BuiltInCategory.OST_StructuralColumns)]
+
+    return walls, foundations, floors, framing, columns
+
+def print_structural_elements_report(walls, foundations, floors, framing, columns):
+        """
+        Принимает списки конструктивных элементов Revit, группирует их
+        и выводит структурированный отчет с ID и именами в консоль.
+        """
+        # Создаем структурированный словарь для красивой итерации
+        structural_data = {
+            "1. Стены (OST_Walls)": walls,
+            "2. Фундаменты (OST_StructuralFoundation)": foundations,
+            "3. Перекрытия (OST_Floors)": floors,
+            "4. Несущий каркас (OST_StructuralFraming)": framing,
+            "5. Несущие колонны (OST_StructuralColumns)": columns
+        }
+
+        # Наша шапка отчета
+        print("=" * 60)
+        print("ОТЧЕТ О СБОРЕ КОНСТРУКТИВНЫХ ЭЛЕМЕНТОВ В ПРОЕКТЕ")
+        print("=" * 60)
+
+        # Перебираем категории и печатаем элементы внутри них
+        for category_name, elements_list in structural_data.items():
+            print("\n{} (Всего элементов: {})".format(category_name, len(elements_list)))
+            print("-" * 50)
+
+            if not elements_list:
+                print("  [Элементы данной категории в проекте отсутствуют]")
+                continue
+
+            for idx, elem in enumerate(elements_list, 1):
+                # Безопасное чтение параметров элемента, чтобы скрипт никогда не падал
+                try:
+                    elem_name = elem.Name if hasattr(elem, 'Name') else "Без имени"
+                    print("  {}. ID: {}, Имя: {}".format(idx, elem.Id, elem_name))
+                except Exception as e:
+                    print("  {}. ID: {}, [Ошибка чтения имени: {}]".format(idx, elem.Id, str(e)))
+
+        print("\n" + "=" * 60)
+        print("ПЕЧАТЬ ПОЛНОСТЬЮ ЗАВЕРШЕНА")
+        print("=" * 60)
+
+
+
 
 
 

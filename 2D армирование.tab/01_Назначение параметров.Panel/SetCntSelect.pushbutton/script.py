@@ -27,6 +27,7 @@ from Autodesk.Revit.DB import *
 import wpf
 from System import Windows
 
+
 # CustomImports
 from Snippets._set_param import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
 from Snippets._work_with_reinf import SUM_SHP_sep_to_list, print_nested_list
@@ -90,8 +91,8 @@ class MyCustomWindow(Windows.Window):
             # Закрыть окно после обработки
             self.Close()
 
-        except Exception as e:
-            print("Ошибка в save_button_clicked:", e)
+        except Exception as ex:
+            forms.alert("Произошел сбой: {}".format(str(ex)), title="Ошибка в скрипте")
 
     def chBox_Checked(self, sender, args):
         self.ChBox.IsChecked = True
