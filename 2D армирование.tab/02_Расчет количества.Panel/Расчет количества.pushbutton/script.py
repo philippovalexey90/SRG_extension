@@ -34,7 +34,7 @@ from System import Windows
 # CustomImports
 from Snippets._selection import FEC_AllReinf_in_doc
 from Snippets._work_with_reinf import SHP_sep_to_list, List_reinf_SHP_summ_dct, SUM_sep_to_list, \
-    List_reinf_SUM_summ_dct, calculate_a_summ_GPT, check_SUM_without_SHP, print_dict_elements
+    List_reinf_SUM_summ_dct, calculate_a_summ, calculate_a_summ_set, check_SUM_without_SHP, print_dict_elements
 from Snippets._transactions import write_total_cnt_to_revit
 
 clr.AddReference('System.Windows.Forms')
@@ -56,10 +56,10 @@ check_SUM_without_SHP(SHP_simple, SUM_simple)
 # print_dict_elements(SHP_simple)
 # print_dict_elements(SUM_simple)
 
-updated_SHP = calculate_a_summ_GPT(SHP_simple_work, SUM_simple_work)
+updated_SHP = calculate_a_summ(SHP_simple_work, SUM_simple_work)
 # print_dict_elements(SHP_set_work)
 # print_dict_elements(SUM_set_work)
-updated_SHP_set = calculate_a_summ_GPT(SHP_set_work, SUM_set_work)
+updated_SHP_set = calculate_a_summ_set(SHP_set_work, SUM_set_work)
 
 write_total_cnt_to_revit(updated_SHP, doc)
 write_total_cnt_to_revit(updated_SHP_set, doc)
