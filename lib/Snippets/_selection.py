@@ -38,7 +38,8 @@ def get_selected_elements_short(uidoc):
     return [doc.GetElement(e_id) for e_id in uidoc.Selection.GetElementsIds()]
 
 def get_selected_elements_simple(uidoc):
-    """ Function to get selected elements in Revit UI"""
+    """ Function to get selected elements in Revit UI
+    Возвращает коллекцию (список) элементов, а не один объект"""
     selected_elements = revit.get_selection()
     return selected_elements
 
@@ -254,7 +255,37 @@ def print_structural_elements_report(walls, foundations, floors, framing, column
         print("=" * 60)
 
 
+def universalLookupParameter(elem, parameter_name):
+    """
+    Ищет параметр у элемента Revit вне зависимости от того,
+    задан ли он по типу (Type) или по экземпляру (Instance).
 
+    :param elem: Объект элемента Revit (Element)
+    :param parameter_name: Строковое имя параметра (например, "• Диаметр")
+    :return: Объект параметра (Parameter) или None, если параметр не найден
+    """
+    if not elem:
+        return None
+
+    # Шаг 1: Пробуем найти параметр в свойствах ЭКЗЕМПЛЯРА
+    param = elem.LookupParameter(parameter_name)
+    if param:
+        return param
+
+    # Шаг 2: Если в экземпляре нет, пробуем найти в свойствах ТИПА
+    # Используем глобальную переменную doc, которую вы объявили в блоке Variables
+    type_id = elem.GetTypeId()
+
+    # Проверяем, что у элемента есть ID типа (сравниваем напрямую с классом ElementId)
+    if type_id and type_id != ElementId.InvalidElementId:
+        elem_type = doc.GetElement(type_id)
+        if elem_type:
+            param = elem_type.LookupParameter(parameter_name)
+            if param:
+                return param
+
+    # Если параметр не найден ни в типе, ни в экземпляре
+    return None
 
 
 
@@ -460,6 +491,52 @@ def filter_specific_views(all_views):
     filtered_views = [v for v in all_views if v.ViewType in target_types]
 
     return filtered_views
+
+
+def get_selected_schedule(selected_elements, active_view):
+    """
+    Функция проверяет выборку и возвращает имя спецификации.
+    Если спецификация не выбрана на экране, проверяет активный вид.
+    """
+    # 1. Проверяем элементы, полученные из вашей функции
+    if selected_elements:
+        first_element = selected_elements[0]  # Берем первый элемент из списка
+        return first_element
+
+    # 2. Если на экране ничего не выбрано, проверяем текущий активный вид
+    if isinstance(active_view, DB.ViewSchedule):
+        return active_view
+
+    # Если спецификация не найдена
+    return None
+
+
+def check_schedule_combination(schedule_name):
+    """
+    Проверяет, начинается ли имя спецификации с 6-го по счету символа
+    на комбинацию 'E1' или 'E2' (с учетом английской/русской раскладки).
+    """
+    # Нам нужно как минимум 7 символов в имени, чтобы проверить 6-й и 7-й
+    if not schedule_name or len(schedule_name) < 7:
+        return False
+
+    # Берем срез строки: 6-й и 7-й символы (индексы 5 и 6, индекс 7 не включается)
+    combination = schedule_name[5:7]
+
+    # Приводим к верхнему регистру для универсальности (e1 -> E1)
+    combination_upper = combination.upper()
+
+    # Список допустимых вариантов (английская E и русская Е)
+    valid_combinations = [
+        "E1", "E2",  # Английская E
+        u"Е1", u"Е2"  # Русская Е (юникод для IronPython 2.7)
+    ]
+
+    # Проверяем, входит ли наша комбинация в список разрешенных
+    if combination_upper in valid_combinations:
+        return True
+
+    return False
 
 
 # Class
