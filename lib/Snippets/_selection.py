@@ -214,6 +214,56 @@ def FEC_AllStructBuiltInCat_in_doc(doc):
 
     return walls, foundations, floors, framing, columns
 
+def FEC_ElementsByCategories(doc, category_names):
+    """
+    Собирает экземпляры элементов по переданному списку названий встроенных категорий.
+
+    :param doc: Документ Revit (Document)
+    :param category_names: Список строк с названиями категорий (например: ["OST_Walls", "OST_Floors"])
+    :return: Словарь {Имя_категории: [список_элементов]}
+    """
+    categories_net_list = NetList[BuiltInCategory]()
+    # Словарь для быстрого сопоставления числового ID категории с её строковым именем
+    id_to_name_map = {}
+    # Итоговый словарь, который вернет функция
+    result_dict = {}
+
+    # 1. Преобразуем строковые названия в объекты BuiltInCategory
+    for name in category_names:
+        # Ищем атрибут внутри класса BuiltInCategory по его строковому имени
+        bic = getattr(BuiltInCategory, name, None)
+        if bic is not None:
+            categories_net_list.Add(bic)
+            id_to_name_map[int(bic)] = name
+            result_dict[name] = []
+        else:
+            print("Предупреждение: Категория '{}' не найдена в BuiltInCategory.".format(name))
+
+    # Если ни одной корректной категории не передано, возвращаем пустой словарь
+    if categories_net_list.Count == 0:
+        return result_dict
+
+    # 2. Собираем ВСЕ элементы выбранных категорий за ОДИН проход по базе данных
+    multi_filter = ElementMulticategoryFilter(categories_net_list)
+    all_elements = FilteredElementCollector(doc) \
+        .WherePasses(multi_filter) \
+        .WhereElementIsNotElementType() \
+        .ToElements()
+
+    # 3. Распределяем элементы по соответствующим ключам словаря за один цикл
+    for elem in all_elements:
+        if not elem.Category:
+            continue
+
+        cat_id = elem.Category.Id.IntegerValue
+        cat_name = id_to_name_map.get(cat_id)
+
+        if cat_name:
+            result_dict[cat_name].append(elem)
+
+    return result_dict
+
+
 def print_structural_elements_report(walls, foundations, floors, framing, columns):
         """
         Принимает списки конструктивных элементов Revit, группирует их
