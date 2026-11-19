@@ -9,6 +9,7 @@ from Autodesk.Revit.DB import *
 from Autodesk.Revit.DB.Structure import *
 from Autodesk.Revit.UI import *
 from pyrevit import revit, DB, UI
+from collections import Counter
 
 # Variables
 
@@ -277,37 +278,6 @@ def calculate_a_summ(SHP_simple_work, SUM_simple_work):
     # print_dict_with_nested_elements(updated_SHP)
     return updated_SHP
 
-# def calculate_a_summ_set(SHP_set_work, SUM_set_work):
-#     updated_SHP = {}
-#
-#     for key, SHP_list in SHP_set_work.items():
-#         # Безопасно получаем список из SUM_simple. Если ключа нет — используем пустой список
-#         SUM_list = SUM_set_work.get(key, [])
-#         # print('Ключ: {}'.format(tuple_to_string(key)))
-#         new_list_for_key = []
-#
-#         for i in SHP_list:
-#             # Считаем сумму "Расчетного числа" индивидуально для текущего элемента `i`
-#             element_total_cnt = 0
-#             i_mrk = get_element_param_value(i, '• Марка сборки')
-#
-#             for j in SUM_list:
-#                 j_mrk = get_element_param_value(j, '• Марка сборки')
-#                 if i_mrk == j_mrk:
-#                     element_total_cnt += get_element_param_value(j, '• Расчетное число')
-#             # Вместо добавления в конец исходного списка,
-#             # упаковываем элемент и его сумму во вложенный список [элемент, сумма]
-#             new_list_for_key.append([i, element_total_cnt])
-#
-#         # Записываем обновленный вложенный список в новый словарь
-#         updated_SHP[key] = new_list_for_key
-#
-#     # print('----------Проверка print_dict_elements----------')
-#     # print_dict_with_nested_elements(updated_SHP)
-#     return updated_SHP
-
-# -*- coding: utf-8 -*-
-
 def calculate_a_summ_set(SHP_set_work, SUM_set_work):
     updated_SHP = {}
 
@@ -403,6 +373,59 @@ def check_SUM_without_SHP(SHP_simple, SUM_simple):
                         sum_element.Id
                     )
                 )
+
+def get_common_section_from_reinf(reinf):
+    """
+    Находит наиболее часто встречающееся непустое значение параметра '• Раздел'
+    среди элементов в списке reinf.
+    Если список пуст или ни у одного элемента не заполнен раздел — возвращает None.
+    """
+    if not reinf:
+        return None
+
+    sections = []
+
+    for elem in reinf:
+        param = elem.LookupParameter('• Раздел')
+        if param and param.HasValue:
+            val = param.AsString()
+            if val and val.strip():
+                sections.append(val.strip())
+
+    # Если ни одного заполненного значения не найдено
+    if not sections:
+        return None
+
+    # Counter подсчитывает вхождения, most_common(1) возвращает список вида [('КЖ1', 15)]
+    most_common_item = Counter(sections).most_common(1)[0][0]
+    return most_common_item
+
+
+def get_common_struct_mark_from_reinf(reinf):
+    """
+    Находит наиболее часто встречающееся непустое значение параметра '• Марка конструкции'
+    среди элементов в списке reinf.
+    Если список пуст или ни у одного элемента не заполнена марка — возвращает None.
+    """
+    if not reinf:
+        return None
+
+    marks = []
+
+    for elem in reinf:
+        param = elem.LookupParameter('• Марка конструкции')
+        if param and param.HasValue:
+            val = param.AsString()
+            if val and val.strip():
+                marks.append(val.strip())
+
+    # Если ни одного заполненного значения не найдено
+    if not marks:
+        return None
+
+    # Counter подсчитывает вхождения, most_common(1) возвращает список вида [('Пм-1', 12)]
+    most_common_item = Counter(marks).most_common(1)[0][0]
+    return most_common_item
 
 
 # Работа со словарем

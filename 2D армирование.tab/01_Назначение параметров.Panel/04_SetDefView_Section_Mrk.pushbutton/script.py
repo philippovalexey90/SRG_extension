@@ -34,6 +34,7 @@ from System import Windows
 # CustomImports
 from Snippets._set_param import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
 from Snippets._selection import FEC_AllReinf_in_view
+from Snippets._work_with_reinf import get_common_section_from_reinf, get_common_struct_mark_from_reinf
 
 clr.AddReference('System.Windows.Forms')
 clr.AddReference('IronPython.Wpf')
@@ -57,8 +58,8 @@ active_view = doc.ActiveView
 # for i in all_detail_in_view: reinf.append(i)
 
 reinf = FEC_AllReinf_in_view(doc, active_view)
-
-
+common_section = get_common_section_from_reinf(reinf)
+common_struct_mark = get_common_struct_mark_from_reinf(reinf)
 
 # Xamlfile
 
@@ -69,7 +70,11 @@ xamlfile = script.get_bundle_file('ui.xaml')
 class MyCustomWindow(Windows.Window):
     def __init__(self):
         wpf.LoadComponent(self, xamlfile)
+        if common_section is not None:
+            self.tb_sec_mrk.Text = str(common_section)
 
+        if common_struct_mark is not None:
+            self.tb_struct_mrk.Text = str(common_struct_mark)
 
         self.SaveButton.Click += self.save_button_clicked
 

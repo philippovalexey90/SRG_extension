@@ -36,7 +36,8 @@ from System import Windows
 from Snippets._set_param        import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
 from Snippets._selection        import FEC_AllReinf_in_view, FEC_AllReinf_in_view_SHP, get_all_views_on_active_sheet, filter_specific_views
 from Snippets._prep             import is_user_on_sheet
-from Snippets._work_with_reinf  import print_nested_list
+from Snippets._work_with_reinf  import print_nested_list, get_common_section_from_reinf, get_common_struct_mark_from_reinf
+
 
 clr.AddReference('System.Windows.Forms')
 clr.AddReference('IronPython.Wpf')
@@ -65,6 +66,9 @@ for view in views:
     reinf.extend(FEC_AllReinf_in_view(doc, view))
     reinf_SHP.extend(FEC_AllReinf_in_view_SHP(doc, view))
 
+common_section = get_common_section_from_reinf(reinf_SHP)
+common_struct_mark = get_common_struct_mark_from_reinf(reinf_SHP)
+
 # print_nested_list(reinf)
 
 
@@ -91,6 +95,14 @@ class MyCustomWindow(Windows.Window):
         # Загружаем интерфейс из XAML
         wpf.LoadComponent(self, xamlfile)
         # --- УСТАНОВКА ЗНАЧЕНИЙ ПО УМОЛЧАНИЮ ---
+        if common_section is not None:
+            self.tb_sec_mrk.Text = str(common_section)
+
+        if common_struct_mark is not None:
+            self.tb_struct_mrk.Text = str(common_struct_mark)
+
+
+
         self.ChBox_1.IsChecked = True
         self.tb_struct_cnt.Text = "1"
         self.tb_set_cnt.Text = "1"
