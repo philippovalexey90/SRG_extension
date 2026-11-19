@@ -248,63 +248,6 @@ def List_reinf_SUM_summ_dct(reinf_SUM_summ):
 
     return SUM_simple_work, SUM_set_work, SUM_simple
 
-# def calculate_a_summ(SHP_simple, SUM_simple):
-#     for idx, (key, value) in enumerate(SHP_simple.items(), 1):
-#         print('{}, Ключ: {}'.format(idx, tuple_to_string(key)))
-#         # Если значение список или кортеж
-#         if isinstance(value, (list, tuple)):
-#             print('Количество элементов: {}'.format(len(value)))
-#             for i, elem in enumerate(value, 1):
-#                 if hasattr(elem, 'Id') and hasattr(elem, 'Name'):
-#                     print('{}, Id: {}, Имя: {}'.format(i, elem.Id, elem.Name))
-#                 else:
-#                     print('{}, {}'.format(i, elem))
-#     # for key in SHP_simple:
-#     for key, SHP_list in SHP_simple.items():
-#         # print('SHP_simple key: {}'.format(tuple_to_string(key)))
-#         # SHP_list = SHP_simple[key]
-#         SUM_list = SUM_simple.get(key)
-#         if not SUM_list:
-#             continue
-#         for i in SHP_list:
-#             cnt = 0
-#             # print('='*60)
-#             i_mrk = get_element_param_value(i, '• Марка элемента')
-#             # print('{}-{}'.format(i.Id, i_mrk))
-#             for j in SUM_list:
-#                 j_mrk = get_element_param_value(j, '• Марка элемента')
-#                 if i_mrk == j_mrk:
-#                     cnt += get_element_param_value(j, '• Расчетное число')
-#                     # print('----- {}-{}, • Расчетное число {}'.format(j.Id, j_mrk, cnt))
-#                     add_to_dict(SHP_simple, key, cnt)
-#                     print('• Марка элемента {}, Количество {}'. format(i_mrk, cnt))
-#
-#
-#
-#
-#
-#         # try:
-#         #     SUM_list = SUM_simple[key]
-#         #     # print('SUM_list: {}'.format(SUM_simple[key]))
-#         #
-#         #     for i in SHP_list:
-#         #         cnt = 0
-#         #         # print('='*60)
-#         #         i_mrk = get_element_param_value(i, '• Марка элемента')
-#         #         # print('{}-{}'.format(i.Id, i_mrk))
-#         #         for j in SUM_list:
-#         #             j_mrk = get_element_param_value(j, '• Марка элемента')
-#         #             if i_mrk == j_mrk:
-#         #                 cnt += get_element_param_value(j, '• Расчетное число')
-#         #                 # print('----- {}-{}, • Расчетное число {}'.format(j.Id, j_mrk, cnt))
-#         #                 add_to_dict(SHP_simple, key, cnt)
-#         #                 print(SHP_simple[key])
-#         #
-#         # except:
-#         #     continue
-#
-#     return SHP_simple
-
 def calculate_a_summ(SHP_simple_work, SUM_simple_work):
     updated_SHP = {}
 
@@ -334,33 +277,67 @@ def calculate_a_summ(SHP_simple_work, SUM_simple_work):
     # print_dict_with_nested_elements(updated_SHP)
     return updated_SHP
 
+# def calculate_a_summ_set(SHP_set_work, SUM_set_work):
+#     updated_SHP = {}
+#
+#     for key, SHP_list in SHP_set_work.items():
+#         # Безопасно получаем список из SUM_simple. Если ключа нет — используем пустой список
+#         SUM_list = SUM_set_work.get(key, [])
+#         # print('Ключ: {}'.format(tuple_to_string(key)))
+#         new_list_for_key = []
+#
+#         for i in SHP_list:
+#             # Считаем сумму "Расчетного числа" индивидуально для текущего элемента `i`
+#             element_total_cnt = 0
+#             i_mrk = get_element_param_value(i, '• Марка сборки')
+#
+#             for j in SUM_list:
+#                 j_mrk = get_element_param_value(j, '• Марка сборки')
+#                 if i_mrk == j_mrk:
+#                     element_total_cnt += get_element_param_value(j, '• Расчетное число')
+#             # Вместо добавления в конец исходного списка,
+#             # упаковываем элемент и его сумму во вложенный список [элемент, сумма]
+#             new_list_for_key.append([i, element_total_cnt])
+#
+#         # Записываем обновленный вложенный список в новый словарь
+#         updated_SHP[key] = new_list_for_key
+#
+#     # print('----------Проверка print_dict_elements----------')
+#     # print_dict_with_nested_elements(updated_SHP)
+#     return updated_SHP
+
+# -*- coding: utf-8 -*-
+
 def calculate_a_summ_set(SHP_set_work, SUM_set_work):
     updated_SHP = {}
 
     for key, SHP_list in SHP_set_work.items():
-        # Безопасно получаем список из SUM_simple. Если ключа нет — используем пустой список
         SUM_list = SUM_set_work.get(key, [])
-        # print('Ключ: {}'.format(tuple_to_string(key)))
+
+        # 1. Предварительно группируем и суммируем данные из SUM_list за один проход
+        # Ключ словаря: кортеж (марка_сборки, марка_конструкции)
+        # Значение: накопленная сумма расчетного числа
+        grouped_sums = {}
+        for j in SUM_list:
+            j_sborka_mrk = get_element_param_value(j, '• Марка сборки')
+            j_struct_mrk = get_element_param_value(j, '• Марка конструкции')
+            calc_val = get_element_param_value(j, '• Расчетное число') or 0
+
+            group_key = (j_sborka_mrk, j_struct_mrk)
+            grouped_sums[group_key] = grouped_sums.get(group_key, 0) + calc_val
+
+        # 2. Мгновенно подставляем готовые суммы для элементов из SHP_list
         new_list_for_key = []
-
         for i in SHP_list:
-            # Считаем сумму "Расчетного числа" индивидуально для текущего элемента `i`
-            element_total_cnt = 0
-            i_mrk = get_element_param_value(i, '• Марка сборки')
+            i_sborka_mrk = get_element_param_value(i, '• Марка сборки')
+            i_struct_mrk = get_element_param_value(i, '• Марка конструкции')
 
-            for j in SUM_list:
-                j_mrk = get_element_param_value(j, '• Марка сборки')
-                if i_mrk == j_mrk:
-                    element_total_cnt += get_element_param_value(j, '• Расчетное число')
-            # Вместо добавления в конец исходного списка,
-            # упаковываем элемент и его сумму во вложенный список [элемент, сумма]
+            # Получаем готовую сумму из словаря за O(1) без повторного обращения к API
+            element_total_cnt = grouped_sums.get((i_sborka_mrk, i_struct_mrk), 0)
             new_list_for_key.append([i, element_total_cnt])
 
-        # Записываем обновленный вложенный список в новый словарь
         updated_SHP[key] = new_list_for_key
 
-    # print('----------Проверка print_dict_elements----------')
-    # print_dict_with_nested_elements(updated_SHP)
     return updated_SHP
 
 

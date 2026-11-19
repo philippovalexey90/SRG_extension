@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-__title__   = "Версия v 0.2"
-__doc__ = """Version = 0.2
+__title__   = "Версия v 0.5"
+__doc__ = """Version = 0.5
 Date    = 23.10.2026
 IronPython 2.7
 logger = script.get_logger()
