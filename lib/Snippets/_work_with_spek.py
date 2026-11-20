@@ -167,9 +167,6 @@ def isParameterValueZeroForElements(parameter_mass):
     # Если значение равно нулю или пусто
     return True
 
-
-# -*- coding: utf-8 -*-
-
 def getScheduleColumnsStatus(elements_in_schedule):
     """
     Анализирует группу элементов спецификации и формирует финальный статус для каждого столбца,
@@ -225,7 +222,6 @@ def getScheduleColumnsStatus(elements_in_schedule):
                     columns_status[parameter_name] = True
 
     return columns_status
-
 
 def updateFieldVisibility(master_schedule, parameter_name, should_hide):
     """

@@ -103,15 +103,12 @@ class MyCustomWindow(Windows.Window):
 
 
 
-        self.ChBox_1.IsChecked = True
-        self.tb_struct_cnt.Text = "1"
-        self.tb_set_cnt.Text = "1"
+
         # ----------------------------------------
 
         # Подписка на события
         self.SaveButton.Click += self.save_button_clicked
-        self.ChBox_1.Checked += self.chBox_Checked
-        self.ChBox_1.Unchecked += self.chBox_Unchecked
+
 
     def save_button_clicked(self, sender, event):
         try:
@@ -119,8 +116,7 @@ class MyCustomWindow(Windows.Window):
             struct_mrk = self.tb_struct_mrk.Text
             struct_cnt = self.tb_struct_cnt.Text
 
-            set_cnt = self.tb_set_cnt.Text
-            set_chBox = self.ChBox_1.IsChecked
+
 
             # print("Марка раздела: {}\n".format(sec_mrk))
             # print("Марка конструкции: {}\n".format(struct_mrk))
@@ -132,9 +128,7 @@ class MyCustomWindow(Windows.Window):
             SetSec_mrkToReinf(sec_mrk, reinf)
             SetStruct_mrkToReinf(struct_mrk, reinf)
             SetStruct_cntToReinf(struct_cnt, reinf_SHP)
-            # SetSet_mrkToReinf(set_mrk, reinf)
-            SetSet_cntToReinf(set_cnt, reinf_SHP)
-            # SetSetChBox_cntToReinf(set_chBox, reinf)
+
 
             # Закрыть окно после обработки
             self.Close()

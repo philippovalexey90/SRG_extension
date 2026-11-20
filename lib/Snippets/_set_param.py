@@ -92,9 +92,6 @@ def SetStruct_cntToReinf (s, reinf):
     except Exception as ex:
         TaskDialog.Show('Ошибка транзакции', str(ex))
 
-
-
-
 def SetSet_mrkToReinf (s, reinf):
     try:
         # get shared parameter
@@ -115,11 +112,6 @@ def SetSet_mrkToReinf (s, reinf):
         pass
     except:
         pass
-
-
-
-
-
 
 def SetSet_cntToReinf (s, reinf):
     """
@@ -153,15 +145,6 @@ def SetSet_cntToReinf (s, reinf):
             t.Commit()
     except Exception as ex:
         TaskDialog.Show('Ошибка транзакции', str(ex))
-
-
-
-
-
-
-
-
-
 
 def SetSetChBox_cntToReinf(s, reinf):
     try:

@@ -35,6 +35,7 @@ from System import Windows
 from Snippets._set_param import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
 from Snippets._selection import FEC_AllReinf_in_view
 from Snippets._work_with_reinf import get_common_section_from_reinf, get_common_struct_mark_from_reinf
+from Snippets._prep import is_user_on_sheet, get_view_drawing_set
 
 clr.AddReference('System.Windows.Forms')
 clr.AddReference('IronPython.Wpf')
@@ -58,7 +59,20 @@ active_view = doc.ActiveView
 # for i in all_detail_in_view: reinf.append(i)
 
 reinf = FEC_AllReinf_in_view(doc, active_view)
-common_section = get_common_section_from_reinf(reinf)
+
+if not is_user_on_sheet(1):
+    # 1. Пробуем получить раздел из свойств самого вида
+    common_section = get_view_drawing_set(active_view)
+    # 2. Если параметра на виде нет или он пустой — определяем по 2D-армированию
+    if not common_section:
+        common_section = get_common_section_from_reinf(reinf)
+
+
+else:
+    # Пользователь на листе
+    common_section = get_common_section_from_reinf(reinf)
+
+
 common_struct_mark = get_common_struct_mark_from_reinf(reinf)
 
 # Xamlfile
