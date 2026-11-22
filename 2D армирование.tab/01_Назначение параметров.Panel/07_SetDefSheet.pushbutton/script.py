@@ -35,7 +35,7 @@ from System import Windows
 # CustomImports
 from Snippets._set_param        import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
 from Snippets._selection        import FEC_AllReinf_in_view, FEC_AllReinf_in_view_SHP, get_all_views_on_active_sheet, filter_specific_views
-from Snippets._prep             import is_user_on_sheet
+from Snippets._prep             import is_user_on_sheet, get_view_drawing_set
 from Snippets._work_with_reinf  import print_nested_list, get_common_section_from_reinf, get_common_struct_mark_from_reinf
 
 
@@ -66,7 +66,12 @@ for view in views:
     reinf.extend(FEC_AllReinf_in_view(doc, view))
     reinf_SHP.extend(FEC_AllReinf_in_view_SHP(doc, view))
 
-common_section = get_common_section_from_reinf(reinf_SHP)
+# 1. Пробуем получить раздел из свойств самого вида
+common_section = get_view_drawing_set(active_view)
+# 2. Если параметра на виде нет или он пустой — определяем по 2D-армированию
+if not common_section:
+        common_section = get_common_section_from_reinf(reinf_SHP)
+
 common_struct_mark = get_common_struct_mark_from_reinf(reinf_SHP)
 
 # print_nested_list(reinf)
