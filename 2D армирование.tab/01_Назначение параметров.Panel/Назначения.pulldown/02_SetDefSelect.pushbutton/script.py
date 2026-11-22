@@ -29,7 +29,8 @@ from System import Windows
 
 # CustomImports
 from Snippets._set_param import SetSec_mrkToReinf, SetStruct_mrkToReinf, SetStruct_cntToReinf, SetSet_mrkToReinf, SetSet_cntToReinf, SetSetChBox_cntToReinf
-
+from Snippets._work_with_reinf import get_common_section_from_reinf, get_common_struct_mark_from_reinf
+from Snippets._prep import is_user_on_sheet, get_view_drawing_set
 
 clr.AddReference('System.Windows.Forms')
 clr.AddReference('IronPython.Wpf')
@@ -40,6 +41,7 @@ doc = __revit__.ActiveUIDocument.Document
 uidoc = __revit__.ActiveUIDocument
 selection = revit.get_selection()
 reinf_id = selection.element_ids
+active_view = doc.ActiveView
 
 reinf=[]
 
@@ -49,7 +51,13 @@ reinf=[]
 
 for i in reinf_id: reinf.append(doc.GetElement(i))
 
-
+if not is_user_on_sheet(1):
+    # 1. Пробуем получить раздел из свойств самого вида
+    common_section = get_view_drawing_set(active_view)
+else:
+    # Пользователь на листе
+    common_section = get_common_section_from_reinf(reinf)
+common_struct_mark = get_common_struct_mark_from_reinf(reinf)
 
 
 # Xamlfile
@@ -63,6 +71,15 @@ class MyCustomWindow(Windows.Window):
         # Загружаем интерфейс из XAML
         wpf.LoadComponent(self, xamlfile)
         # --- УСТАНОВКА ЗНАЧЕНИЙ ПО УМОЛЧАНИЮ ---
+        if common_section is not None:
+            self.tb_sec_mrk.Text = str(common_section)
+
+        if common_struct_mark is not None:
+            self.tb_struct_mrk.Text = str(common_struct_mark)
+
+
+
+
         self.ChBox.IsChecked = False
         self.tb_struct_cnt.Text = "1"
         self.tb_set_cnt.Text = "1"

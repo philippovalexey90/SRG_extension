@@ -63,9 +63,9 @@ reinf = FEC_AllReinf_in_view(doc, active_view)
 if not is_user_on_sheet(1):
     # 1. Пробуем получить раздел из свойств самого вида
     common_section = get_view_drawing_set(active_view)
-    # 2. Если параметра на виде нет или он пустой — определяем по 2D-армированию
-    if not common_section:
-        common_section = get_common_section_from_reinf(reinf)
+
+
+
 
 
 else:
